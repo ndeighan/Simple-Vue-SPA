@@ -1,4 +1,5 @@
 # spa-site2
+This is a simple Vue SPA to be used in conjunction with the "Express Webserver" repo - https://github.com/ndeighan/Simple-Express-Webserver
 
 ## Project setup
 ```
@@ -9,6 +10,7 @@ npm install
 ```
 npm run serve
 ```
+Loads to http://localhost:8080/
 
 ### Compiles and minifies for production
 ```
