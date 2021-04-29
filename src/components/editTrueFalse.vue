@@ -1,10 +1,7 @@
 <template>
-    <div class="true-false-inputs" v-bind="trueFalseQuestion">
-        <div class="create-title">
-            <div class="create-title-text">Create True/False</div>
-            <div class="create-title-close">
-                <p @click="submit">X</p>
-            </div>
+    <div class="edit-true-false">
+        <div>
+            Edit True/False
         </div>
         <hr />
         <div><p><strong>Question ID: </strong>{{trueFalseQuestion.questionId}}</p></div>
@@ -52,63 +49,37 @@
         </div>
     </div>
 </template>
-
 <script>
     export default {
-        name: 'CreateTrueFalse',
-        props: ['data', 'quizId'],
+        name: 'EditTrueFalse',
+        props: ['quizzesData', 'quizId', 'questionId'],
         data(){
             return {
                 trueFalseQuestion: {
-                    "questionId": 1,
+                    "questionId": this.questionId,
                     "questionType": "trueFalse", //Question type
                     "questionText": "", //Question text
                     "answer": "true", //"true" or "false"
                     "attempts": 0, //attempts, 0 = infinite
                     "isCorrect": false
-                }
+                },
+                questionToEdit: {}
             }
         },
         mounted() {
-            if(typeof(this.data.quizzes[this.quizId-1]) !== 'undefined'){
-                //console.log("###existing quiz###", this.data.quizzes[this.quizId-1]);
-                this.trueFalseQuestion.questionId = this.data.quizzes[this.quizId-1].questions.length + 1;
-            }
+            this.trueFalseQuestion = this.quizzesData.quizzes[this.quizId-1].questions[this.questionId-1];
+            //console.log("trueFalseQuestion", this.trueFalseQuestion);
         },
         methods: {
             submit(event){
-                //console.log("###submit###", event.target.innerText);
-                if(event.target.innerText === "SUBMIT"){
-                    this.trueFalseQuestion.attempts = parseInt(this.trueFalseQuestion.attempts);
-                    this.$emit('submitted', this.trueFalseQuestion, this.quizId, true);
-
-                    event.preventDefault();
-                } else {
-                    this.trueFalseQuestion = [];
-                    this.$emit('submitted', this.trueFalseQuestion, this.quizId, false);
-                }
-                
+                //console.log("edit trueFalse submit", this.trueFalseQuestion);
+                this.trueFalseQuestion.attempts = parseInt(this.trueFalseQuestion.attempts);
+                this.$emit('submitted', this.trueFalseQuestion, this.quizId);
+                event.preventDefault();
             }
+        }
     }
-}
 </script>
-
 <style scoped>
-    .true-false-inputs{
-        max-width: 700px;
-        background-color: deepskyblue;
-        padding: 10px;
-    }
-    .create-title {
-        width: 100%;
-        display: inline-flex;
-    }
-    .create-title-text {
-        width: 50%;
-    }
-    .create-title-close {
-        width: 50%;
-        text-align: right;
-        cursor: pointer;
-    }
+
 </style>

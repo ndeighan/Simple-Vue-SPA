@@ -1,10 +1,7 @@
 <template>
-    <div class="true-false-inputs" v-bind="inputQuestion">
-        <div class="create-title">
-            <div class="create-title-text">Create Input</div>
-            <div class="create-title-close">
-                <p @click="submit">X</p>
-            </div>
+    <div class="edit-input">
+        <div>
+            Edit Input
         </div>
         <hr />
         <div><p><strong>Question ID: </strong>{{inputQuestion.questionId}}</p></div>
@@ -34,66 +31,38 @@
         </div>
     </div>
 </template>
-
 <script>
     export default {
-        name: 'CreateInput',
-        props: ['data', 'quizId'],
+        name: 'EditInput',
+        props: ['quizzesData', 'quizId', 'questionId'],
         data(){
             return {
                 inputQuestion: {
-                    "questionId": 1,
+                    "questionId": this.questionId,
                     "questionType": "input",
                     "questionText": "",
                     "answer": "",
                     "isCorrect": false,
                     "attempts": 0
-                }
+                },
+                questionToEdit: {}
             }
         },
-        mounted(){
-            if(typeof(this.data.quizzes[this.quizId-1]) !== 'undefined'){
-                //console.log("###existing quiz###", this.data.quizzes[this.quizId-1]);
-                this.inputQuestion.questionId = this.data.quizzes[this.quizId-1].questions.length + 1;
-            }
-            
-
+        mounted() {
+            this.inputQuestion = this.quizzesData.quizzes[this.quizId-1].questions[this.questionId-1];
+            //console.log("inputQuestion", this.inputQuestion);
         },
         methods: {
             submit(event){
-                //console.log("###submit###", event.target.innerText);
-                if(event.target.innerText === "SUBMIT"){
-                    this.inputQuestion.attempts = parseInt(this.inputQuestion.attempts);
-                    this.$emit('submitted', this.inputQuestion, this.quizId, true);
+                //console.log("edit inputQuestion submit", this.inputQuestion);
+                this.inputQuestion.attempts = parseInt(this.inputQuestion.attempts);
+                this.$emit('submitted', this.inputQuestion, this.quizId);
 
-                    event.preventDefault();
-                } else {
-                    this.inputQuestion = [];
-                    this.$emit('submitted', this.inputQuestion, this.quizId, false);
-                }
+                event.preventDefault();
             }
-            
-            
         }
     }
 </script>
-
 <style scoped>
-    .true-false-inputs{
-        max-width: 700px;
-        background-color: deepskyblue;
-        padding: 10px;
-    }
-    .create-title {
-        width: 100%;
-        display: inline-flex;
-    }
-    .create-title-text {
-        width: 50%;
-    }
-    .create-title-close {
-        width: 50%;
-        text-align: right;
-        cursor: pointer;
-    }
+
 </style>

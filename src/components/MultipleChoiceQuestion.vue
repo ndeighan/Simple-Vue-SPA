@@ -3,7 +3,7 @@
         <div class="question-content">
             <p class="is-size-5 has-text-weight-bold" v-bind:class="className">{{ question.questionText }}</p>
             <form ref="form" class="multiple-choice-question-form">
-                <div v-if="question.multipleAnswer">
+                <div v-if="question.multipleAnswer === 'true'">
                     multipleAnswer:
                     <label v-for="option in question.options" 
                            class="checkbox" :key="option.optionId">           
@@ -73,14 +73,15 @@
                 let options = this.question.options;
                 let correctAnswers = [];
 
-                if(this.question.multipleAnswer){
+                if(this.question.multipleAnswer === "true"){
                     for(var i=0; i<options.length; i++){
-                        if(options[i].correct){
+                        if(options[i].correct === "true"){
                             correctAnswers.push(options[i].optionId)
                         }
                     }
                     this.question.isCorrect = this.compareMultipleAnswers(correctAnswers, this.userInput);
                 } else {
+                    
                     for(i=0; i<options.length; i++){
                         if(this.userInput === options[i].optionId){
                             this.question.isCorrect = options[i].correct;
@@ -88,7 +89,7 @@
                     } 
                 }
 
-                if(this.question.isCorrect){
+                if(this.question.isCorrect === "true"){
                     this.className = "is-success";
                     this.disableSubmit = true;
                 } else {

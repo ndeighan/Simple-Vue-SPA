@@ -1,10 +1,7 @@
 <template>
-    <div class="true-false-inputs" v-bind="mcqQuestion">
-        <div class="create-title">
-            <div class="create-title-text">Create MCQ</div>
-            <div class="create-title-close">
-                <p @click="submit">X</p>
-            </div>
+<div class="edit-mcq">
+    <div>
+            Edit MCQ
         </div>
         <hr />
         <div><p><strong>Question ID: </strong>{{mcqQuestion.questionId}}</p></div>
@@ -83,14 +80,12 @@
                 </a>
             </div>
         </div>
-        
-    </div>
+</div>
 </template>
-
 <script>
     export default {
-        name: 'CreateMCQ',
-        props: ['data', 'quizId'],
+        name: 'EditMCQ',
+        props: ['quizzesData', 'quizId', 'questionId'],
         data(){
             return {
                 mcqQuestion: {
@@ -106,28 +101,24 @@
                     "optionId": 0,
                     "optionText": "",
                     "correct": "false"
-                }
+                },
+                questionToEdit: {}
             }
         },
-        mounted(){
-            if(typeof(this.data.quizzes[this.quizId-1]) !== 'undefined'){
-                console.log("###existing quiz###", this.data.quizzes[this.quizId-1]);
-                this.mcqQuestion.questionId = this.data.quizzes[this.quizId-1].questions.length + 1;
-            }
+        mounted() {
+            this.mcqQuestion = this.quizzesData.quizzes[this.quizId-1].questions[this.questionId-1];
+            console.log("mcqQuestion", this.mcqQuestion);
         },
         methods: {
             submit(event){
-                if(event.target.innerText === "SUBMIT"){
-                    this.mcqQuestion.attempts = parseInt(this.mcqQuestion.attempts);
-                    this.$emit('submitted', this.mcqQuestion, this.quizId, true);
+                console.log("edit mcqQuestion submit", this.mcqQuestion);
+                this.mcqQuestion.attempts = parseInt(this.mcqQuestion.attempts);
+                this.$emit('submitted', this.mcqQuestion, this.quizId);
 
-                    event.preventDefault();
-                } else {
-                    this.mcqQuestion = [];
-                    this.$emit('submitted', this.mcqQuestion, this.quizId, false);
-                }
+
+                event.preventDefault();
             },
-            addAnswer(){ 
+                        addAnswer(){ 
                 //Generate optionId
                 this.option.optionId = this.mcqQuestion.options.length + 1;
                 //clone to new object
@@ -152,37 +143,6 @@
         }
     }
 </script>
-
 <style scoped>
-    .new-question-title{
-        display: flex;
-    }
-    .add-answer-button {
-        margin-bottom: 10px;
-    }
-    .option-title {
-        text-align: left;
-        width: 50%;
-    }
-    .remove-answer {
-        text-align: left;
-        width: 50%;
-    }
-    .true-false-inputs{
-        max-width: 700px;
-        background-color: deepskyblue;
-        padding: 10px;
-    }
-    .create-title {
-        width: 100%;
-        display: inline-flex;
-    }
-    .create-title-text {
-        width: 50%;
-    }
-    .create-title-close {
-        width: 50%;
-        text-align: right;
-        cursor: pointer;
-    }
+
 </style>

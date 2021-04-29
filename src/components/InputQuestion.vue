@@ -3,10 +3,13 @@
         <div class="question-content">
             <p class="is-size-5 has-text-weight-bold" v-bind:class="className">{{ question.questionText }}</p>
             <form ref="form" class="input-question-form">
-                <input class="input" 
-                       name="userInput" 
-                       v-model="userInput"
-                       :disabled="disableSubmit">
+                <textarea style="resize:none"
+                    class="input" 
+                    name="userInput" 
+                    v-model="userInput"
+                    :disabled="disableSubmit"
+                    placeholder="Insert answer."
+                    rows="1" cols="50" />
                 <a href="#" 
                    v-on:click="submit" 
                    class="button"
@@ -25,7 +28,7 @@
         ],
         data(){
             return({
-                userInput: 0,
+                userInput: "",
                 className: "",
                 attempts: 0,
                 disableSubmit: false
